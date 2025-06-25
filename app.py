@@ -1,11 +1,11 @@
 import os
 import streamlit as st
 
-def create_from_ascii_tree(file_content, folder_name, save_location):
-    lines = file_content.split('\n')
-    root_path = os.path.join(save_location, folder_name)
+def create_from_ascii_tree(file_content, folder_name):
+    root_path = os.path.join("output", folder_name)  # Save locally in 'output/'
     os.makedirs(root_path, exist_ok=True)
 
+    lines = file_content.split('\n')
     stack = [root_path]
     prev_indent = 0
 
@@ -36,20 +36,23 @@ def create_from_ascii_tree(file_content, folder_name, save_location):
 
     return root_path
 
+# Streamlit App
 st.title("📁 Tarun Auto Folder Creator")
 
 uploaded_file = st.file_uploader("Upload your ASCII Tree `.txt` file", type=['txt'])
-folder_name = st.text_input("Enter parent folder name (e.g., ProjectX)")
-save_location = st.text_input("Enter full path to save (e.g., C:/Users/YourName/Desktop)")
-
-st.caption("⚠️ Due to browser security, folder browsing is not allowed. Please copy-paste the path manually.")
+folder_name = st.text_input("Enter folder name (saved in ./output/)")
 
 if st.button("Create Folder Structure"):
-    if uploaded_file and folder_name and save_location:
+    if uploaded_file and folder_name:
         try:
             content = uploaded_file.read().decode("utf-8")
-            result_path = create_from_ascii_tree(content, folder_name, save_location)
-            st.success(f"✅ Folder structure created at: `{result_path}`")
+            result_path = create_from_ascii_tree(content, folder_name)
+            st.success(f"✅ Folder structure created at `{result_path}`")
+
+            # Show download link if needed
+            if os.path.exists(result_path):
+                st.write(f"📂 Contents saved inside `{result_path}` on server.")
+
         except Exception as e:
             st.error(f"❌ Error: {e}")
     else:
