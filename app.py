@@ -36,17 +36,21 @@ def create_from_ascii_tree(file_content, folder_name, save_location):
 
     return root_path
 
-
-st.title("📁 ASCII Tree Folder Creator")
+st.title("📁 Tarun Auto Folder Creator")
 
 uploaded_file = st.file_uploader("Upload your ASCII Tree `.txt` file", type=['txt'])
-folder_name = st.text_input("Enter parent folder name")
-save_location = st.text_input("Enter full save path (e.g., /home/user/Desktop)")
+folder_name = st.text_input("Enter parent folder name (e.g., ProjectX)")
+save_location = st.text_input("Enter full path to save (e.g., C:/Users/YourName/Desktop)")
+
+st.caption("⚠️ Due to browser security, folder browsing is not allowed. Please copy-paste the path manually.")
 
 if st.button("Create Folder Structure"):
     if uploaded_file and folder_name and save_location:
-        content = uploaded_file.read().decode("utf-8")
-        result_path = create_from_ascii_tree(content, folder_name, save_location)
-        st.success(f"✅ Folder structure created at: `{result_path}`")
+        try:
+            content = uploaded_file.read().decode("utf-8")
+            result_path = create_from_ascii_tree(content, folder_name, save_location)
+            st.success(f"✅ Folder structure created at: `{result_path}`")
+        except Exception as e:
+            st.error(f"❌ Error: {e}")
     else:
-        st.warning("Please fill all fields and upload a file.")
+        st.warning("⚠️ Please fill all fields and upload a valid .txt file.")
