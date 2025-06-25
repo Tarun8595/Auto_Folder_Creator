@@ -1,0 +1,8 @@
+PhotoUploaderApp/
+	android/
+	app/
+	src/
+	  MainActivity.java or MainActivity.kt
+	backend/
+	  server.js
+	package.json
